@@ -24,11 +24,12 @@ Still missing is plymouth preparation, as there were crash difficulties with ply
 These volumio-specific functions and/ or overrides are placed in script file volumio-functions.
 
 ## **Using Breakpoints**
-Breakpoints are designed to let initramfs stop at pre-defined (but optional/ configurable) locations in initramfs.  
+Breakpoints are a big step forward for debugging, designed to let initramfs stop at pre-defined (but optional/ configurable) locations in initramfs.   
 When a breakpoint is reached, initramfs jumps to a shell.  
-It is not an endpoint,leaving the shell continues the initramfs flow. This is different from the way debugging is done with the current version, which stops initramfs alltogether.  
+It is not an endpoint,leaving the shell continues the initramfs flow.  
+This is different from the way debugging is done with the current version, which stops initramfs alltogether.  
 
-Valid breakpoints are:
+## Valid breakpoints are:
 ```
 cmdline, modules, backup-gpt, srch-firmw-upd, srch-fact-reset, kernel-rollb, kernel-upd, resize-data, mnt-overlayfs, modfstab, switch-root
 ```
@@ -45,13 +46,13 @@ Here you can inspect/ modify parameters, using `exit` will return you to the nor
 
 ## WIP WIP WIP
 
-This documentation is still work in progress.  
+This documentation is still work in progress and will be completed soon with a comprehensive description of the components involved.  
 The initramfs script collection has been thoroughly tested with x86 and arvm7 (Odroid N2).  
-It has not been verified with an RPi or Primo, but this *should* be just verification, there should be no more functional differences.  
-(Most of them are obslete as support has stopped for old armv7 boards).  
+It has not been verified with an RPi or Primo, but this *should* be just verification, as there *should* be no more functional differences.  
+(Most of the original differences are now obsolete as support has stopped for old armv7 boards).  
 
 MP1 was added to Volumio later and has also not been verified.   
-There is some work to be done for mp1, as this is the only device which received ```init``` modifications for preparing kernel 6.1y.  
+This is relevant, because some work needs to be done for mp1, it is the only device which received very specific ``init``` updates because of necessary modifications with preparing kernel 6.1y: it needs u-boot to be updated as well..  
 
 # **Quick Edit Initramfs**
 

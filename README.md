@@ -2,7 +2,13 @@
 # **Redesigned Volumio initramfs scripting**
 
 This readme gives a quick overview of the files involved and how to integrate them into **volumio3-os**  
-The idea is to replace the different init scripts (init, init.nextarm, init86 etc) by one and the same script collection.  
+This documentation is still WIP and will be enhanced soon.
+
+One of the main reasons for refactoring this was the lack of debugging capabilities in the current version.  
+Where most of the arm boards have the ability to add a console log to monitor/debug the boot process, x86 does not have that opportunity.
+Also, using the chosen approach brings us closer to the original initramfs scripts as used for Debian and Ubuntu.
+
+The idea was to replace the different init scripts (init, init.nextarm, init86 etc) by one and the same script collection.  
 Instead of moving just one "init" script into initramfs, the new design inserts a series of scripts.  
 The scripts can have device-specific extensions, this decision is made by the board recipe designer.  
 Extensions can override and extend existing script functions.  

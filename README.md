@@ -3,22 +3,23 @@
 
 This readme gives a quick overview of the files involved and how to integrate them into **volumio3-os**
 The idea is to replace the different init scripts (init, init.nextarm, init86 etc) by one and the same script collection.
-Instead of moveing just one "inir" script into initramfs, the new design inserts a series of scripts.
-The script can have device-specific extensions.
+Instead of moving just one "init" script into initramfs, the new design inserts a series of scripts.
+The scripts can have device-specific extensions, this decision is made by the board recipe designer.
+Extensions can override and extend existing script functions.
 
 First an explanation of the files involved.
 
 ## **scripts/functions**
-These are taken unmodified from `/usr/share/initramfs-tools/scripts`.
-Only a few of the functions are used.
+These are basically taken unmodified from `/usr/share/initramfs-tools/scripts` (Debian 10 from spring 2020, after the release of Volumio 3).
+Only a few of the functions are used. Still missing is plymouth preparation, as there were crash difficulties with plymouth at that particular time.
 
 ## **scripts/volumio-functions**
 These volumio-specific functions and/ or overrides are placed in script file volumio-functions
 
 ## **Using Breakpoints**
-Breakpoints are designed to let initramfs stop at pre-defined, but configurable locations in initramfs.
+Breakpoints are designed to let initramfs stop at pre-defined (but optional/ configurable) locations in initramfs.
 When a breakpoint is reached, initramfs jumps to a shell. 
-It is not an endpoint,leaving the shell continues the initramfs flow.
+It is not an endpoint,leaving the shell continues the initramfs flow. This is different from the way debugging is done with the current version, which stops initramfs alltogether.
 
 Valid breakpoints are:
 ```
@@ -36,6 +37,15 @@ When reaching a listed breakpoint, `initramfs` will drop to a temporary shell at
 Here you can inspect/ modify parameters
 Using `exit` will return you to the normal initramfs script flow.
 
+## WIP WIP WIP
+
+This documentation is still work in progress.
+The initramfs script collection has been thoroughly tested with x86 and arvm7 (Odroid N2).
+It has not been verified with an RPi or Primo, but this *should* be just verification, there should be no more functional differences.
+(Most of them are obslete as support has stopped for old armv7 boards).
+
+MP1 was added to Volumio later and has also not been verified.  
+There is some work to be done for mp1, as this is the only device which received ```init``` modifications for preparing kernel 6.1y. 
 
 # **Quick Edit Initramfs**
 

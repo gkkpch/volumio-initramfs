@@ -1,17 +1,30 @@
-# WIP WIP WIP WIP WIP
-# **Redesigned Volumio initramfs scripting**
+# 
+|Date|Author|Change|
+|---|---|---|
+|20230501|gkkpch|Initial V1.0
+|20230621||Starting the documention
+
+
+
+# **Redesigned Volumio init script**
 
 This readme gives a quick overview of the files involved and how to integrate them into **volumio3-os**.  
 This documentation is still WIP and will be enhanced soon.
 
-One of the main reasons for refactoring this was the lack of debugging capabilities in the current version.  
+One of the main reasons for refactoring this was the lack of debugging capabilities in the current init script versions.  
 Where most of the arm boards have the ability to add a console log to monitor/debug the boot process, x86 does not have that opportunity.
-Also, using the chosen approach brings us closer to the original initramfs scripts as used for Debian and Ubuntu.
+Also, using the chosen approach brings Volumio's init script into a structure closer to the original initramfs scripts as used with  Debian and Ubuntu.
 
-The idea was to replace the different init scripts (init, init.nextarm, init86 etc) by one and the same script collection.  
-Instead of moving just one "init" script into initramfs, the new design inserts a series of scripts.  
-The scripts can have device-specific extensions, this decision is made by the board recipe designer.  
-Extensions can override and extend existing script functions.  
+During the development process, the currently maintained init scripts (init, init.nextarm, init86 etc.) were replaced by a single initramfs script set, covering the Raspberry PI, various other armv7 boards and x86.  
+Replacing the Volumio init script with the original initramfs approach from Ubuntu and Debian also means that, instead of moving just one "init" script into initramfs, the new design now inserts a basic collection of initramfs scripts. 
+
+Though the use of init "hooks" does not really apply to Volumio,  the available initramfs general functions have been used as much as possible. 
+Volumio does not need the complete initramfs functionality and therefore only implements a part of them. 
+
+Scripts are allowed to be  be modified and implement function extensions (not calling it hooks).
+An extension overrides and extends an existing script function.  
+An extension can be therefore be used to override a existing function to implement a device-specific requirement.
+Extensions are therefore board-specific and the board implementer's responsibility.  
 
 First an explanation of the files involved.
 

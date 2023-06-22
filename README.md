@@ -6,10 +6,10 @@
 
 
 
-# **Redesigned Volumio init script**
+# **Volumio initramfs implementation**
 
 This readme gives a quick overview of the files involved and how to integrate them into **volumio3-os**.  
-This documentation is still WIP and will be enhanced soon.
+This documentation is still WIP.
 
 One of the main reasons for refactoring this was the lack of debugging capabilities in the current init script versions.  
 Where most of the arm boards have the ability to add a console log to monitor/debug the boot process, x86 does not have that opportunity.
@@ -18,23 +18,39 @@ Also, using the chosen approach brings Volumio's init script into a structure cl
 During the development process, the currently maintained init scripts (init, init.nextarm, init86 etc.) were replaced by a single initramfs script set, covering the Raspberry PI, various other armv7 boards and x86.  
 Replacing the Volumio init script with the original initramfs approach from Ubuntu and Debian also means that, instead of moving just one "init" script into initramfs, the new design now inserts a basic collection of initramfs scripts. 
 
-Though the use of init "hooks" does not really apply to Volumio,  the available initramfs general functions have been used as much as possible. 
-Volumio does not need the complete initramfs functionality and therefore only implements a part of them. 
+Though the use of init "hooks" does not really apply to Volumio, the available initramfs general functions have been used as much as possible. Volumio-specific functions are added to a separate script module.
+Volumio does not need all initramfs functions and therefore only uses a part of them. Volumio does not use hooks like the standrad initramfs does, but implements something similar (without calling it a hook).
 
-Scripts are allowed to be  be modified and implement function extensions (not calling it hooks).
-An extension overrides and extends an existing script function.  
-An extension can be therefore be used to override a existing function to implement a device-specific requirement.
+Volumio-specific scripts are not allowed to be modified and implement function extensions. This ought to be done in a separate function module (script).
+An extension can either override an existing volumio function and/ or add a new volumio script function.  
+An extension can be therefore be used to implement a device-specific requirement.
 Extensions are therefore board-specific and the board implementer's responsibility.  
 
-First an explanation of the files involved.
+## ```##TODO```:  Test whether this works properly.
 
-## **scripts/functions**
-These are basically taken unmodified from `/usr/share/initramfs-tools/scripts` (Debian 10 from spring 2020, after the release of Volumio 3).  
-Only a few of the functions are used.  
-Still missing is plymouth preparation, as there were crash difficulties with plymouth at that particular time.
+  
+
+
+# **Contents**
+|File/ folder|Contents
+|---|---|
+|conf|Environment configuration	
+|scripts|initramfs scripts (custom and standard functions)
+|init|init script
+
+
+## Folder **scripts/functions**
+These are basically taken unmodified from ```/usr/share/initramfs-tools/scripts```.  Only a few of the functions are used.  
+(Debian 10 from spring 2020, after the release of Volumio 3).  
+ 
+Known issue: Still missing is plymouth preparation, as there were crash difficulties with plymouth at that particular time.
 
 ## **scripts/volumio-functions**
-These volumio-specific functions and/ or overrides are placed in script file volumio-functions.
+Standard Volumio functions, used with all boards.
+## **scripts/custom-functions**
+Board-specific functions and/ or overrides are placed in script file ```custom-functions```. 
+
+# Debugging
 
 ## **Using Breakpoints**
 Breakpoints are a big step forward for debugging, designed to let initramfs stop at pre-defined (but optional/ configurable) locations in initramfs.   

@@ -21,16 +21,17 @@
 	export REBOOT_MODE="normal"
 	export SPLASH="false"
 	export USEKMSG="no"
-  export DATADEV=
-  export UUIDFMT=
+    export DATADEV=
+    export UUIDFMT=
 	export debug=
-  export panic=
-  export log_output=
+    export panic=
+    export log_output=
 	export break=
   #export log_output=/run/initramfs/initramfs.debug
 
 
 	source scripts/functions
+	source scripts/volumio-functions
 	source scripts/custom-functions
 
 	[ -d /dev ] || mkdir -m 0755 /dev

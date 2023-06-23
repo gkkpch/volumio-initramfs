@@ -37,11 +37,14 @@ Extensions are therefore board-specific and the board implementer's responsibili
 |conf|Environment configuration	
 |scripts|initramfs scripts (custom and standard functions)
 |init|init script
+|mkinitramfs-custom.sh|adapted script (replace standard initramfs script folder)
 
 
 ## Folder **scripts/functions**
-These are basically taken unmodified from ```/usr/share/initramfs-tools/scripts```.  Only a few of the functions are used.  
-(Debian 10 from spring 2020, after the release of Volumio 3).  
+This is basically an unmodified copy from ```/usr/share/initramfs-tools/scripts/functions```.  
+Only a few of them are used.  
+(Based on Debian 10 from spring 2020, after the release of Volumio 3, still valid). 
+
  
 Known issue: Still missing is plymouth preparation, as there were crash difficulties with plymouth at that particular time.
 
@@ -49,6 +52,10 @@ Known issue: Still missing is plymouth preparation, as there were crash difficul
 Standard Volumio functions, used with all boards.
 ## **scripts/custom-functions**
 Board-specific functions and/ or overrides are placed in script file ```custom-functions```. 
+
+## **mkinitramfs-custom.sh**
+
+The customized ```mkinitramfs``` build script for Volumio has been modified to replace the standard initramfs hook scripts by the above used scripts for volumio, see function ```build_initrd()```.
 
 # Debugging
 

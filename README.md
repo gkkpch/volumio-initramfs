@@ -6,6 +6,14 @@
 |20230622||Adding the old (20210209) build environment as a reference
 |||Documentation in progress
 
+## ```##TODO```
+
+|Task|Status|
+|---|---|
+|Test whether the overriding of functions works properly|open
+|Board-specifics for mp1|open
+|Verify RPi USB boot|open (find someone to do this)
+
 
 # **Volumio initramfs implementation**
 
@@ -27,7 +35,7 @@ Volumio-specific scripts are not allowed to be modified and implement function e
 An extension can be therefore be used to implement a device-specific requirement. 
 Extensions are therefore board-specific and the board implementer's responsibility. Extensions are always a combination of an overridden volumio function and an addition.
 
-## ```##TODO```:  Test whether this works properly.
+
 
   
 
@@ -89,7 +97,7 @@ It has not been verified with an RPi or Primo, but this *should* be just verific
 (Most of the original differences are now obsolete as support has stopped for old armv7 boards).  
 
 MP1 was added to Volumio later and has also not been verified.   
-This is relevant, because some work needs to be done for mp1, it is the only device which received very specific ``init``` updates because of necessary modifications with preparing kernel 6.1y: it needs u-boot to be updated as well..  
+This is relevant, because some work needs to be done for mp1, it is the only device which received very specific ```init``` updates because of necessary modifications with preparing kernel 6.1y: it needs u-boot to be updated as well..  
 
 # **Quick Edit Initramfs**
 

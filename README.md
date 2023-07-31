@@ -10,6 +10,7 @@
 
 |Task|Status|
 |---|---|
+|check all init scripts for chnages after december 2020||
 |Test whether the overriding of functions works properly|open
 |Board-specifics for mp1|open
 |Verify RPi USB boot|open (find someone to do this)

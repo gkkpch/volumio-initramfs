@@ -4,6 +4,7 @@
 |20230501|gkkpch|Initial V1.0
 |20230621||Starting the documention
 |20230622||Adding the old (20210209) build environment as a reference
+|20231224||Added first "Malaga" amendments
 |||Documentation in progress
 
 ## ```##TODO```

@@ -175,7 +175,11 @@ sync
 log "Preparing to run chroot for more ${DEVICE} configuration" "info"
 start_chroot_final=$(date +%s)
 cp "${SRC}/scripts/initramfs/${INIT_TYPE}" ${ROOTFSMNT}/root/init
-cp -dR "${SRC}/scripts/initramfs/scripts" ${ROOTFSMNT}/root
+if [ -d ${SRC}/scripts/initramfs/scripts ]; then
+  [ -d ${ROOTFSMNT}/root/scripts ] || mkdir ${ROOTFSMNT}/root/scripts
+  cp "${SRC}"/scripts/initramfs/scripts/* ${ROOTFSMNT}/root/scripts
+fi	
+
 cp "${SRC}"/scripts/initramfs/mkinitramfs-custom.sh ${ROOTFSMNT}/usr/local/sbin
 cp "${SRC}"/scripts/volumio/chrootconfig.sh ${ROOTFSMNT}
 
@@ -239,7 +243,9 @@ chroot "$ROOTFSMNT" /chrootconfig.sh
 log "Finished chroot config for ${DEVICE}" "okay"
 # Clean up chroot stuff
 rm ${ROOTFSMNT:?}/*.sh ${ROOTFSMNT}/root/init
-rm -r ${ROOTFSMNT}/root/scripts
+if [ -d ${ROOTFSMNT}/root/scripts ]; then
+  rm -r ${ROOTFSMNT}/root/scripts
+fi
 
 unmount_chroot ${ROOTFSMNT}
 end_chroot_final=$(date +%s)

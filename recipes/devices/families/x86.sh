@@ -7,7 +7,8 @@ BASE="Debian"
 ARCH="i386"
 BUILD="x86"
 
-DEBUG_BUILD="yes"
+### Build image with initramfs debug info?
+DEBUG_IMAGE="no"
 ### Device information
 DEVICENAME="x86"
 # This is useful for multiple devices sharing the same/similar kernel
@@ -29,7 +30,7 @@ BOOT_END=180
 IMAGE_END=3800
 BOOT_TYPE=gpt        # msdos or gpt
 BOOT_USE_UUID=yes    # Add UUID to fstab
-INIT_TYPE="init" # init.{x86/nextarm/nextarm_tvbox}
+INIT_TYPE="initv2"   # init{v2}
 
 # Modules that will be added to intramfs
 # Review these for more modern kernels?
@@ -183,6 +184,10 @@ EOF
 blacklist snd_pcsp
 blacklist pcspkr
 EOF
+
+log "Copying custom initramfs script functions"
+[ -d ${ROOTFSMNT}/root/scripts ] || mkdir ${ROOTFSMNT}/root/scripts
+cp "${SRC}/scripts/initramfs/custom/x86/custom-functions" ${ROOTFSMNT}/root/scripts
 }
 
 # Will be run in chroot (before other things)
@@ -230,18 +235,17 @@ device_chroot_tweaks_pre() {
 
   log "Preparing boot configurations" "info"
 
-  KERNEL_LOGLEVEL="loglevel=0" # Default to KERN_EMERG
-  DISABLE_PN="net.ifnames=0"   # For legacy ifnames in buster
+
 
   # Build up the base parameters
   kernel_params=(
     # Bios stuff
     "biosdevname=0"
-       # Boot screen stuff
+    # Boot screen stuff
     "splash" "plymouth.ignore-serial-consoles"
     # Boot params
     "imgpart=UUID=%%IMGPART%%" "bootpart=UUID=%%BOOTPART%%" "datapart=UUID=%%DATAPART%%"
-    "hwdevice=${DEVICENAME}"
+    "hwdevice=x86"
     # Image params
     "imgfile=/volumio_current.sqsh"
     # Disable linux logo during boot
@@ -251,18 +255,22 @@ device_chroot_tweaks_pre() {
     # backlight control (notebooks)
     "acpi_backlight=vendor"
   )
-
-  if [[ $DEBUG_IMAGE == yes ]]; then
+  
+  KERNEL_LOGLEVEL="loglevel=0" # Default to KERN_EMERG, also recommended debug image
+  DISABLE_PN="net.ifnames=0"   # For legacy ifnames in buster
+  kernel_params+=("${DISABLE_PN}")
+  
+  if [ "${DEBUG_IMAGE}" == "yes" ]; then
     log "Creating debug image" "wrn"
-    KERNEL_LOGLEVEL="loglevel=8" # KERN_DEBUG
-    kernel_params+=("debug" "use_ksmg=yes" "break=start,modules,krnl-upd")     # Set breakpoints
+    # Set breakpoints, loglevel, debug, kernel buffer output etc.
+    kernel_params+=("break=" "${KERNEL_LOGLEVEL}" "debug" "use_kmsg=yes") 
     log "Enabling ssh on boot"
     touch /boot/ssh
   else
-    kernel_params+=("use_kmsg=yes quiet") # initramfs logs buffer
+    # No output (use loglevel=0)
+    kernel_params+=("quiet ${KERNEL_LOGLEVEL} use_kmsg=no") 
   fi
-  kernel_params+=("${DISABLE_PN}")
-  kernel_params+=("${KERNEL_LOGLEVEL}")
+ 
 
   log "Setting ${#kernel_params[@]} Kernel params:" "" "${kernel_params[*]}"
 
@@ -301,9 +309,10 @@ EOF
 
   log "Creating fstab template to be used in initrd"
   sed "s/^UUID=${UUID_BOOT}/%%BOOTPART%%/g" /etc/fstab >/etc/fstab.tmpl
+
   log "Setting plymouth theme to volumio"
   plymouth-set-default-theme volumio
-
+  
   log "Notebook-specific: ignore 'cover closed' event"
   sed -i "s/#HandleLidSwitch=suspend/HandleLidSwitch=ignore/g" /etc/systemd/logind.conf
   sed -i "s/#HandleLidSwitchExternalPower=suspend/HandleLidSwitchExternalPower=ignore/g" /etc/systemd/logind.conf

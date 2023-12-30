@@ -1,5 +1,5 @@
 #!/bin/sh
-
+#
 # Default PATH differs between shells, and is not automatically exported
 # by klibc dash.  Make it consistent.
   	export PATH=/sbin:/usr/sbin:/bin:/usr/bin
@@ -20,18 +20,19 @@
 	export NEWINIT=/sbin/init
 	export REBOOT_MODE="normal"
 	export SPLASH="false"
-	export USEKMSG="no"
+	export USEKMSG="yes"
 	export DATADEV=
 	export UUIDFMT=
 	export debug=
 	export panic=
 	export log_output=
 	export break=
-  #export log_output=/run/initramfs/initramfs.debug
+    export log_output=
 
 
 	source scripts/functions
-	source scripts/custom-functions
+	source scripts/volumio-functions
+	[ -f scripts/custom-functions ] && source scripts/custom-functions
 
 	[ -d /dev ] || mkdir -m 0755 /dev
 	[ -d /root ] || mkdir -m 0700 /root
@@ -107,7 +108,6 @@
 			HW_DEVICE=$value
 			;;
 		use_kmsg)
-	# no|yes
 			USEKMSG=$value
 			;;
 		reboot)
@@ -126,7 +126,7 @@
 		debug)
 			debug=y
 			quiet=n
-			if [ USEKMSG == yes ]; then
+			if [ ${USEKMSG} == yes ]; then
 				log_output=/dev/kmsg
 			else
 				log_output=/run/initramfs/initramfs.debug
@@ -142,10 +142,8 @@
 			esac
 			;;
 		break)
-		  break=$value
-# for testing only, use "export break="" otherwise read from kernel cmdline
-      break="cmdline,modules,validate-params,progress,backup-gpt,create-krnl-bak, search-firmw,search-fact-reset,krnl-rollbck,krnl-upd,resize-data,mnt-overlayfs,modfstab,switch-root"
-
+			break=$value
+			;;
 		esac
 	done
 
@@ -165,6 +163,10 @@
 	load_modules
 	mdev -s
 	[ "$quiet" != "y" ] && log_end_msg
+
+	maybe_break plymouth $LINENO
+
+	load_plymouth
 
 #
 # Initialise squashfile parameter and partition devices

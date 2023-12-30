@@ -55,12 +55,12 @@ Extensions are therefore board-specific and the board implementer's responsibili
 This is basically an unmodified copy from ```/usr/share/initramfs-tools/scripts/functions```.  
 Only a few of them are used.  
 (Based on Debian 10 from spring 2020, after the release of Volumio 3, still valid). 
-
  
 Known issue: Still missing is plymouth preparation, as there were crash difficulties with plymouth at that particular time.
 
 ## **scripts/volumio-functions**
 Standard Volumio functions, used with all boards.
+
 ## **scripts/custom-functions**
 Board-specific functions and/ or overrides are placed in script file ```custom-functions```. 
 
@@ -70,13 +70,21 @@ The customized ```mkinitramfs``` build script for Volumio has been modified to r
 
 # Debugging
 
-## **Using Breakpoints**
-Breakpoints are a big step forward for debugging, designed to let initramfs stop at pre-defined (but optional/ configurable) locations in initramfs.   
-When a breakpoint is reached, initramfs jumps to a shell.  
-It is not an endpoint,leaving the shell continues the initramfs flow.  
-This is different from the way debugging is done with the current version, which stops initramfs alltogether.  
+## **1. Using ```debug``` and ```use_kmsg``` cmdline parameters**
+The use of ```debug``` will allow you to debug the init and functions scripts.  
+Combined with the ```use_kmsg``` parameter, the debug messages will either be printed on the console (usekmsg=yes) or to the debug file in ```/run/initramfs/initramfs.debug```.  
+The debug file can be accessed during initramfs processing ***and*** after the boot process has completed.
 
-## Valid breakpoints are:
+## 2. **Using Breakpoints**
+Breakpoints are a big step forward for debugging, designed to let initramfs stop at optional locations in initramfs, the locations themselves are pre-defined, but can be configured with the ```break``` cmdline parameter.     
+When a breakpoint is reached, initramfs jumps to a temporary busybox shell.  
+Here you can check parameters, look at the kernel log (dmesg) or check the initramfs.debug file (when ```debug``` has been configure, combined with ```use_ksmsg=yes```, see above). 
+
+You could add your own breakpoints, but that would mean a modification of the init script.   
+Use ```do_break()``` for that and remove them when you are finished.
+
+
+### Valid breakpoints are:
 ```
 cmdline, modules, backup-gpt, srch-firmw-upd, srch-fact-reset, kernel-rollb, kernel-upd, resize-data, mnt-overlayfs, modfstab, switch-root
 ```
@@ -88,8 +96,9 @@ A kernel cmdline parameter `break=` with a comma-separated list, e.g.
 break=modules,kernel-upd
 ```
 
-When reaching a listed breakpoint, `initramfs` will drop to a temporary shell at the defined location.  
-Here you can inspect/ modify parameters, using `exit` will return you to the normal initramfs script flow.  
+Dropping to a shell will not cause a kernel panic, when leaving the shell with ```exit```.   
+The initramfs flow will continue aftre the breakpoints, you can use as many breakpoints from the list as you need.  
+This is different from the way debugging is done with the current version, which stops initramfs alltogether and then causes a kernel panic.  
 
 ## WIP WIP WIP
 

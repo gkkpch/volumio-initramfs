@@ -5,6 +5,7 @@
 |20230621||Starting the documention
 |20230622||Adding the old (20210209) build environment as a reference
 |20231224||Added first "Malaga" amendments
+|20231230||Continued. initramfs for x86 tested ok, plymouth splash to follow
 |||Documentation in progress
 
 ## ```##TODO```

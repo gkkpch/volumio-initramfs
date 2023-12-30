@@ -15,6 +15,8 @@
 |Test whether the overriding of functions works properly|open
 |Board-specifics for mp1|open
 |Verify RPi USB boot|open (find someone to do this)
+|Pick ip the plymouth issue a default (debian futureprototype) seems to startup and hold fine until |open
+|Backport Plymouth in case successfull|open
 
 
 # **Volumio initramfs implementation**

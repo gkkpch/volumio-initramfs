@@ -103,6 +103,10 @@ Dropping to a shell will not cause a kernel panic, when leaving the shell with `
 The initramfs flow will continue aftre the breakpoints, you can use as many breakpoints from the list as you need.  
 This is different from the way debugging is done with the current version, which stops initramfs alltogether and then causes a kernel panic.  
 
+## 3. Only for Plymouth issues
+Add "plymouth.debug" to the cmdline parameters. 
+Boot and just let it run. After boot, login (```ctrl-F1```) and check file ```/var/log/plymouth-debug.log```
+
 ## WIP WIP WIP
 
 This documentation is still work in progress and will be completed soon with a comprehensive description of the components involved.  

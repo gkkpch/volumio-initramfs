@@ -6,6 +6,7 @@
 |20230622||Adding the old (20210209) build environment as a reference
 |20231224||Added first "Malaga" amendments
 |20231230||Continued. initramfs for x86 tested ok, plymouth splash to follow
+|20230110||Halted plymouth for the time beingContinued. Started with verifying and updating armv7
 |||Documentation in progress
 
 ## ```##TODO```
@@ -16,8 +17,11 @@
 |Test whether the overriding of functions works properly|open
 |Board-specifics for mp1|open
 |Verify RPi USB boot|open (find someone to do this)
-|Pick ip the plymouth issue, as a default (debian futureprototype) seems to startup and hold until booted|open
+|Pick up the plymouth issue, as a default (debian futureprototype) seems to startup and hold until booted|open
+|Plymouth can't do early display (only after systemd start, shutdown mode was/is ok), kernel module missing in initrd?
+|Initrd modules to be investigated.  
 |Backport Plymouth in case successfull|open
+
 
 
 # **Volumio initramfs implementation**

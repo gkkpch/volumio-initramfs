@@ -6,20 +6,23 @@
 |20230622||Adding the old (20210209) build environment as a reference
 |20231224||Added first "Malaga" amendments
 |20231230||Continued. initramfs for x86 tested ok, plymouth splash to follow
-|20230110||Halted plymouth for the time beingContinued. Started with verifying and updating armv7
-|||Documentation in progress
+|20240110||Halted plymouth for the time being
+|||Continued with verifying and updating armv7
+|20140112||Started Odroid N2/N2+ tests
+|20140117||Documentation in progress
 
 ## ```##TODO```
 
 |Task|Status|
 |---|---|
-|Check all init scripts for changes after december 2020|open|
-|Test whether the overriding of functions works properly|open
+|Check all init scripts for changes after december 2020|done|
+|Test whether the overriding of functions works properly|done
+|Board-specifics for odroidn2|done (none necessary)
 |Board-specifics for mp1|open
 |Verify RPi USB boot|open (find someone to do this)
-|Pick up the plymouth issue, as a default (debian futureprototype) seems to startup and hold until booted|open
-|Plymouth can't do early display (only after systemd start, shutdown mode was/is ok), kernel module missing in initrd?
-|Initrd modules to be investigated.  
+|Pick up the plymouth issue, as a default (debian futureprototype) seems to startup and hold until booted|open-delayed
+|Plymouth can't do early display (only after systemd start, shutdown mode was/is ok), kernel module missing in initrd?|open
+|Initrd modules to be investigated|open
 |Backport Plymouth in case successfull|open
 
 
@@ -44,10 +47,7 @@ Volumio-specific scripts are not allowed to be modified and implement function e
 An extension can be therefore be used to implement a device-specific requirement. 
 Extensions are therefore board-specific and the board implementer's responsibility. Extensions are always a combination of an overridden volumio function and an addition.
 
-
-
-  
-
+Extension example: see ```recipe/families/x86_amd64``` and ```scripts/initramfs/scripts/custom/x86``` 
 
 # **Contents**
 |File/ folder|Contents

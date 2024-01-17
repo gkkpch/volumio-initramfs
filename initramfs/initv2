@@ -1,3 +1,5 @@
+
+
 #!/bin/sh
 #
 # Default PATH differs between shells, and is not automatically exported
@@ -27,8 +29,6 @@
 	export panic=
 	export log_output=
 	export break=
-    export log_output=
-
 
 	source scripts/functions
 	source scripts/volumio-functions

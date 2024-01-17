@@ -1,4 +1,5 @@
 #!/bin/sh
+#
 
 log_simple_msg() {
 #
@@ -71,7 +72,6 @@ load_keyboard_drivers() {
 
 init_partition_params() {
 #
-# part of init....
 #
 #
 #
@@ -144,9 +144,14 @@ init_partition_params() {
 
   fi
 
-  log_begin_msg "Validating UUID= and bootconfig file combination"
+  validate_imgfile_imgpart
+    
+}
+
+validate_imgfile_imgpart() {
+log_begin_msg "Validating UUID= and bootconfig file combination"
   UUIDFMT=`cat /proc/cmdline | grep "UUID=" -o`
-  if [ ! -z "${UUIDFMT}" ] && [ ! "${HW_DEVICE}" == "x86" ]; then
+  if [ ! -z "${UUIDFMT}" ]; then
     if [ "${BOOT_CONFIG}" == "empty" ]; then
       echo "Fatal: when using UUIDs for disk parsing, you MUST also specifiy 'bootconfig=' as part of the kernel cmdline parameters"
       echo "e.g. bootconfig=boot.ini"
@@ -159,12 +164,9 @@ init_partition_params() {
   log_simple_msg "Boot partition" $BOOT_PARTITION
   log_simple_msg "Image partition" $IMAGE_PARTITION
   log_simple_msg "Data partition" $DATA_PARTITION
-  if [ "${HW_DEVICE}" == "x86" ]; then
-    BOOT_DEVICE=/dev/$(lsblk -no PKNAME "${BOOT_PARTITION}")
-  else
-    log_simple_msg "Boot device" $BOOT_DEVICE
-    [ -z ${UUIDFMT} ] || log_simple_msg "Boot config file" $BOOT_CONFIG
-  fi    
+  log_simple_msg "Boot device" $BOOT_DEVICE
+  [ -z ${UUIDFMT} ] || log_simple_msg "Boot config file" $BOOT_CONFIG
+    
 }
 
 wait_for_partitions_ready() {
@@ -192,22 +194,6 @@ wait_for_partitions_ready() {
     exit 0
   fi
 }
-
-check_partition() {
-  for i in 1 2 3 4 5
-  do
-    if [ ! -b "${BOOT_PARTITION}" ]; then
-      sleep 1
-      mdev -s
-    else
-      log_simple_msg "Block device ${BOOT_DEVICE} ready"
-      break
-    fi
-done
-
-}
-
-
 
 parse_disk() {
 #
@@ -286,9 +272,14 @@ load_plymouth() {
 
   if [ "${SPLASH}" = "true" ]
   then
+   echo "[Daemon]
+Theme=volumio
+ShowDelay=0
+DeviceTimeout=5
+" >/usr/share/plymouth/plymouthd.defaults 
     mkdir -m 0755 /run/plymouth
     /sbin/plymouthd --mode=boot --attach-to-session --pid-file=/run/plymouth/pid
-    /bin/plymouth --show-splash
+    #/bin/plymouth --show-splash
   fi
 
 }
@@ -337,7 +328,7 @@ move_backup_gpt_table() {
 
 create_kernel_archive() {
   if [ ! -e "${IMAGEMNT}/kernel_current.tar" ] || [ -e "${IMAGEMNT}/current_kernel_creation" ]; then
-    log_beg_msg "Creating archive for current kernel..."
+    log_begin_msg "Creating archive for current kernel..."
     touch ${IMAGEMNT}/current_kernel_creation
     # exclude ldlinux.sys from kernel tar's to avoid a relocation during kernel-update or factory-reset
     # (little workaround, as this tar version does not support the --exclude= option)

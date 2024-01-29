@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-# Use this empty template to override any function in "volumio-functions" to make it device-specific.
+# Use this template to override any function in "volumio-functions" to make it device-specific.
 
 # Keep your custom-functions script in a separate device folder in "scripts/initramfs".
 # The foldername should reflect the DEVICENAME or DEVICEFAMILY for transparency.

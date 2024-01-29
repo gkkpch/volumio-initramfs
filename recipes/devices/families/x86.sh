@@ -108,6 +108,7 @@ write_device_files() {
   mkdir -p "${ROOTFSMNT}"/boot/efi
   mkdir -p "${ROOTFSMNT}"/boot/efi/EFI/debian
   mkdir -p "${ROOTFSMNT}"/boot/efi/BOOT/
+  
   log "Copying bootloaders and grub configuration template"
   mkdir -p "${ROOTFSMNT}"/boot/grub
   cp "${pkg_root}"/efi/BOOT/grub.cfg "${ROOTFSMNT}"/boot/efi/BOOT/grub.tmpl
@@ -125,6 +126,10 @@ write_device_files() {
   ]
 }
 EOF
+
+  rm ${ROOTFSMNT}/usr/share/plymouth/themes/volumio/*
+  cp -dR volumio/usr/share/plymouth/themes/volumio-v2/* ${ROOTFSMNT}/usr/share/plymouth/themes/volumio
+
   # Headphone detect currently only for atom z8350 with rt5640 codec
   # Evaluate additional requirements when they arrive
   log "Copying acpi event handing for headphone jack detect (z8350 with rt5640 only)"
@@ -185,9 +190,9 @@ blacklist snd_pcsp
 blacklist pcspkr
 EOF
 
-log "Copying custom initramfs script functions"
-[ -d ${ROOTFSMNT}/root/scripts ] || mkdir ${ROOTFSMNT}/root/scripts
-cp "${SRC}/scripts/initramfs/custom/x86/custom-functions" ${ROOTFSMNT}/root/scripts
+  log "Copying custom initramfs script functions"
+  [ -d ${ROOTFSMNT}/root/scripts ] || mkdir ${ROOTFSMNT}/root/scripts
+  cp "${SRC}/scripts/initramfs/custom/x86/custom-functions" ${ROOTFSMNT}/root/scripts
 }
 
 # Will be run in chroot (before other things)
@@ -267,7 +272,7 @@ device_chroot_tweaks_pre() {
     log "Enabling ssh on boot"
     touch /boot/ssh
   else
-    # No output (use loglevel=0)
+    # No output (use "quiet loglevel=0" and in that order!)
     kernel_params+=("quiet ${KERNEL_LOGLEVEL} use_kmsg=no") 
   fi
  
@@ -311,7 +316,10 @@ EOF
   sed "s/^UUID=${UUID_BOOT}/%%BOOTPART%%/g" /etc/fstab >/etc/fstab.tmpl
 
   log "Setting plymouth theme to volumio"
+  
   plymouth-set-default-theme volumio
+  plymouth-set-default-theme
+
   
   log "Notebook-specific: ignore 'cover closed' event"
   sed -i "s/#HandleLidSwitch=suspend/HandleLidSwitch=ignore/g" /etc/systemd/logind.conf

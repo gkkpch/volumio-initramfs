@@ -10,7 +10,7 @@
 	export MODPROBE_OPTIONS="-qb"
 
 # Export relevant Volumio variables for dropping into a shell (breaks, debugging, panics)
-	export BOOT_DELAY=
+	export BOOT_DELAY=5
 	export BOOT_PARTITION=
 	export DATA_PARTITION=
 	export IMAGE_PARTITION=

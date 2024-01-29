@@ -17,9 +17,9 @@
 |---|---|
 |Check all init scripts for changes after december 2020|done|
 |Test whether the overriding of functions works properly|done
-|Board-specifics for odroidn2|done (none necessary)
+|Board-specifics for odroidn2|done
 |Board-specifics for mp1|open
-|Verify RPi USB boot|open (find someone to do this)
+|Verify RPi USB boot|done
 |Pick up the plymouth issue, as a default (debian futureprototype) seems to startup and hold until booted|open-delayed
 |Plymouth can't do early display (only after systemd start, shutdown mode was/is ok), kernel module missing in initrd?|open
 |Initrd modules to be investigated|open
@@ -81,7 +81,7 @@ The customized ```mkinitramfs``` build script for Volumio has been modified to r
 
 ## **1. Using ```debug``` and ```use_kmsg``` cmdline parameters**
 The use of ```debug``` will allow you to debug the init and functions scripts.  
-Combined with the ```use_kmsg``` parameter, the debug messages will either be printed on the console (usekmsg=yes) or to the debug file in ```/run/initramfs/initramfs.debug```.  
+Combined with the ```use_kmsg``` parameter, the debug messages will either be printed on the console (use_kmsg=yes) or to the debug file in ```/run/initramfs/initramfs.debug```.  
 The debug file can be accessed during initramfs processing ***and*** after the boot process has completed.
 
 ## 2. **Using Breakpoints**
@@ -113,6 +113,9 @@ This is different from the way debugging is done with the current version, which
 Add "plymouth.debug" to the cmdline parameters. 
 Boot and just let it run. After boot, login (```ctrl-F1```) and check file ```/var/log/plymouth-debug.log```
 
+
+
+# Integrating the new INITRAMFS (initv2)
 ## WIP WIP WIP
 
 This documentation is still work in progress and will be completed soon with a comprehensive description of the components involved.  
@@ -122,6 +125,26 @@ It has not been verified with an RPi or Primo, but this *should* be just verific
 
 MP1 was added to Volumio later and has also not been verified.   
 This is relevant, because some work needs to be done for mp1, it is the only device which received very specific ```init``` updates because of necessary modifications with preparing kernel 6.1y: it needs u-boot to be updated as well..  
+
+## Build recipe implementation details
+
+### cmdline parameters
+|Item|Usage|(Re)quired/ (O)ptional|
+|---|---|---|
+|bootdelay=|Default is 5, in case you want to reduce the value, add bootdelay to the kernel cmdline. But make sure it also works with factory reset on usb stick|O|
+hwdevice=|Add the name of the device e.g. PI, x86, odroidn2, mp1 etc.|R
+quiet loglevel=0 use_kmsg=no|Normal case, no console output, three parameter combi, use in that order!|R
+loglevel={1¦2¦3¦4¦5¦6¦7¦8}} use_kmsg={yes¦no} {break=}|Alternative for above, for debugging, two or three parameter combi, without 'quiet'. See "Debugging"|O
+
+### init scripts
+
+|Item|Usage|(Re)quired/ (O)ptional|
+|---|---|---|
+|initv2| The recipe should use this for the new init script type|R
+||```init``` and ```init.nextarm``` are the legacy ones, but can still be used. When used, initramfs will revert to the existing version|
+||
+|custom-functions|In case the sbc requires specific initramfs processing, try adding a custom function, overriding the existing one as described in the chapter above. Put the function in ```initramfs/custom/<your-sbc-name>/custom-functions```. The recipe should copy this to folder ```${ROOTFSMNT}/root/scripts/custom/```. See x86 as a simple and mp1 for a more complex example|O
+
 
 # **Quick Edit Initramfs**
 

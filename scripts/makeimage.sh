@@ -175,7 +175,7 @@ sync
 log "Preparing to run chroot for more ${DEVICE} configuration" "info"
 start_chroot_final=$(date +%s)
 cp "${SRC}/scripts/initramfs/${INIT_TYPE}" ${ROOTFSMNT}/root/init
-if [ -d ${SRC}/scripts/initramfs/scripts ]; then
+if [ -d ${SRC}/scripts/initramfs/scripts ] && [ "${INIT_TYPE}" == "initv2" ]; then
   [ -d ${ROOTFSMNT}/root/scripts ] || mkdir ${ROOTFSMNT}/root/scripts
   cp "${SRC}"/scripts/initramfs/scripts/* ${ROOTFSMNT}/root/scripts
 fi	

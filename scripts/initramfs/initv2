@@ -1,3 +1,5 @@
+
+
 #!/bin/sh
 #
 # Default PATH differs between shells, and is not automatically exported
@@ -8,7 +10,7 @@
 	export MODPROBE_OPTIONS="-qb"
 
 # Export relevant Volumio variables for dropping into a shell (breaks, debugging, panics)
-	export BOOT_DELAY=
+	export BOOT_DELAY=5
 	export BOOT_PARTITION=
 	export DATA_PARTITION=
 	export IMAGE_PARTITION=
@@ -27,8 +29,6 @@
 	export panic=
 	export log_output=
 	export break=
-    export log_output=
-
 
 	source scripts/functions
 	source scripts/volumio-functions

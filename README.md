@@ -36,13 +36,15 @@ One of the main reasons for refactoring this was the lack of debugging capabilit
 Where most of the arm boards have the ability to add a console log to monitor/debug the boot process, x86 does not have that opportunity.
 Also, using the chosen approach brings Volumio's init script into a structure closer to the original initramfs scripts as used with  Debian and Ubuntu.
 
-During the development process, the currently maintained init scripts (init, init.nextarm, init86 etc.) were replaced by a single initramfs script set, covering the Raspberry PI, various other armv7 boards and x86.  
+During the development process, the currently maintained init scripts (init, init.nextarm, init86 etc.) will be replaced by a single initramfs script set, covering the Raspberry PI, various other armv7 boards and x86.  
 Replacing the Volumio init script with the original initramfs approach from Ubuntu and Debian also means that, instead of moving just one "init" script into initramfs, the new design now inserts a basic collection of initramfs scripts. 
+
+The design followed the main debian and ubuntu initramfs process, there is no link to dracut.
 
 Though the use of init "hooks" does not really apply to Volumio, the available initramfs general functions have been used as much as possible. Volumio-specific functions are added to a separate script module.
 Volumio does not need all initramfs functions and therefore only uses a part of them. As mentioned, Volumio does not use hooks like the standard initramfs does, but implements something similar (without calling it a hook).
 
-Volumio-specific scripts are not allowed to be modified and implement function extensions. This ought to be done in a separate function module (script) ```custom-functions``` by adding the modified function from ```volumio-functions``` (it willl override the standard one) or by adding a function (extension).  
+Volumio-specific scripts are not allowed to be modified to implement function extensions. This ought to be done in a separate function module (script) ```custom-functions``` by adding the modified function from ```volumio-functions``` (it willl override the standard one) or by adding a function (extension).  
  
 An extension can be therefore be used to implement a device-specific requirement. 
 Extensions are therefore board-specific and the board implementer's responsibility. Extensions are always a combination of an overridden volumio function and an addition.

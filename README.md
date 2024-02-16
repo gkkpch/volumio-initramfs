@@ -9,7 +9,8 @@
 |20240110||Halted plymouth for the time being
 |||Continued with verifying and updating armv7
 |20140112||Started Odroid N2/N2+ tests
-|20140117||Documentation in progress
+|20140129||Prepared mp1 'custom-functions' for kernel 6.1 update
+|20140216||Documentation in progress
 
 ## ```##TODO```
 
@@ -24,7 +25,7 @@
 |Plymouth can't do early display (only after systemd start, shutdown mode was/is ok), kernel module missing in initrd?|open
 |Initrd modules to be investigated|open
 |Backport Plymouth in case successfull|open
-|NON-UUID to UUID switch (e.g.RPi 5|OPEN
+|NON-UUID to UUID switch (e.g.RPi 5)|OPEN
 
 
 

@@ -24,6 +24,7 @@
 |Plymouth can't do early display (only after systemd start, shutdown mode was/is ok), kernel module missing in initrd?|open
 |Initrd modules to be investigated|open
 |Backport Plymouth in case successfull|open
+|NON-UUID to UUID switch (e.g.RPi 5|OPEN
 
 
 

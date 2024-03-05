@@ -9,8 +9,7 @@
 |20240110||Halted plymouth for the time being
 |||Continued with verifying and updating armv7
 |20140112||Started Odroid N2/N2+ tests
-|20140129||Prepared mp1 'custom-functions' for kernel 6.1 update
-|20140216||Documentation in progress
+|20140117||Documentation in progress
 
 ## ```##TODO```
 
@@ -19,14 +18,15 @@
 |Check all init scripts for changes after december 2020|done|
 |Test whether the overriding of functions works properly|done
 |Board-specifics for odroidn2|done
-|Board-specifics for mp1|open
+|Board-specifics for mp1|done
 |Verify RPi USB boot|done
 |Pick up the plymouth issue, as a default (debian futureprototype) seems to startup and hold until booted|open-delayed
 |Plymouth can't do early display (only after systemd start, shutdown mode was/is ok), kernel module missing in initrd?|open
 |Initrd modules to be investigated|open
 |Backport Plymouth in case successfull|open
-|NON-UUID to UUID switch (e.g.RPi 5)|OPEN
-
+|init.nextarm test/ adaptions|done
+|PI additions, incl. block device info to UUID|done
+|OTA tests|open
 
 
 # **Volumio initramfs implementation**
